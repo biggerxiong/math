@@ -1,4 +1,4 @@
-package main
+package config
 
 import "github.com/BurntSushi/toml"
 
@@ -13,7 +13,8 @@ type Path struct {
 
 type Config struct {
 	Path
-	MinDis string
+	MinDis         string `toml:"min_dis"`
+	FoodsPerPerson string `toml:"foods_per_person"`
 }
 
 var config Config
