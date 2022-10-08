@@ -1,0 +1,9 @@
+
+edge_path = "./data/edges.xlsx"
+node_path = "./data/nodes.xlsx"
+street_path = "./data/streets.xlsx"
+
+mid_stream_path = "./data/midstream.xlsx"
+up_stream_path = "./data/upstream.xlsx"
+
+min_dis = 1  # 笛卡尔积距离小于这个值将被视为同一个点
