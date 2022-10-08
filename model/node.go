@@ -4,8 +4,7 @@ import "fmt"
 
 type Node struct {
 	ID int
-	X  string
-	Y  string
+	Point
 }
 
 func (p Node) String() string {
@@ -14,4 +13,8 @@ func (p Node) String() string {
 
 func (p Node) Key() string {
 	return p.String()
+}
+
+func (p Node) GetPoint() *Point {
+	return &p.Point
 }

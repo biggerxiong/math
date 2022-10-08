@@ -13,8 +13,8 @@ type Path struct {
 
 type Config struct {
 	Path
-	MinDis         string `toml:"min_dis"`
-	FoodsPerPerson string `toml:"foods_per_person"`
+	MinDis         float64 `toml:"min_dis"`
+	FoodsPerPerson string  `toml:"foods_per_person"`
 }
 
 var config Config

@@ -14,9 +14,11 @@ func ReadNodes(path string) ([]*model.Node, error) {
 	ret := make([]*model.Node, 0)
 	err = r.ForeachRows(func(i int, values []string) {
 		row := model.Node{
-			ID: util.MustToInt(values[0]),
-			X:  values[1],
-			Y:  values[2],
+			ID: util.StringMustToInt(values[0]),
+			Point: model.Point{
+				X: values[1],
+				Y: values[2],
+			},
 		}
 		ret = append(ret, &row)
 	})

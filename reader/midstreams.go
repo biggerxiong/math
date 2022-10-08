@@ -14,10 +14,12 @@ func ReadMidStreams(path string) ([]*model.MidStream, error) {
 	ret := make([]*model.MidStream, 0)
 	err = r.ForeachRows(func(i int, values []string) {
 		row := model.MidStream{
-			ID:  util.MustToInt(values[0]),
-			X:   values[1],
-			Y:   values[2],
-			Cap: util.MustToInt(values[3]),
+			ID: util.StringMustToInt(values[0]),
+			Point: model.Point{
+				X: values[1],
+				Y: values[2],
+			},
+			Cap: util.StringMustToInt(values[3]),
 		}
 		ret = append(ret, &row)
 	})

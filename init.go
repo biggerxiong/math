@@ -20,6 +20,8 @@ func InitConfig() {
 }
 
 func InitModels() {
+	var err error
+
 	Edges, err = reader.ReadEdges(config.GetConfig().EdgePath)
 	if err != nil {
 		panic(errors.Wrap(err, "read Edges failed"))

@@ -14,9 +14,9 @@ func ReadEdges(path string) ([]*model.Edge, error) {
 	ret := make([]*model.Edge, 0)
 	err = r.ForeachRows(func(i int, values []string) {
 		row := model.Edge{
-			ID:   util.MustToInt(values[0]),
-			From: util.MustToInt(values[1]),
-			To:   util.MustToInt(values[2]),
+			ID:   util.StringMustToInt(values[0]),
+			From: util.StringMustToInt(values[1]),
+			To:   util.StringMustToInt(values[2]),
 			Dis:  values[3],
 		}
 		ret = append(ret, &row)

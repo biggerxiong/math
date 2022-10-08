@@ -14,10 +14,12 @@ func ReadUpStreams(path string) ([]*model.UpStream, error) {
 	ret := make([]*model.UpStream, 0)
 	err = r.ForeachRows(func(i int, values []string) {
 		row := model.UpStream{
-			ID:  util.MustToInt(values[0]),
-			X:   values[1],
-			Y:   values[2],
-			Cap: util.MustToInt(values[3]),
+			ID: util.StringMustToInt(values[0]),
+			Point: model.Point{
+				X: values[1],
+				Y: values[2],
+			},
+			Cap: util.StringMustToInt(values[3]),
 		}
 		ret = append(ret, &row)
 	})
