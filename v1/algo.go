@@ -331,7 +331,11 @@ func (a *Algo) RunUpToMid() *Ans {
 
 				for _, near2 := range upNear {
 					if dis, ok := dij[near2]; ok {
-						path = append(path, &PathEdge{From: buildUpStreamID(near2), To: buildMidStreamID(near), Val: mid.OriCap, Dis: dis})
+						path = append(path, &PathEdge{
+							From: buildUpStreamID(near2),
+							To:   buildMidStreamID(near),
+							Val:  mid.OriCap.Sub(mid.Cap),
+							Dis:  dis})
 					}
 				}
 			}
@@ -339,7 +343,11 @@ func (a *Algo) RunUpToMid() *Ans {
 
 		for _, up := range a.UpStreams {
 			disMul := mid.Point.Distance(&up.Point) * config.GetConfig().MaxDisMul
-			path = append(path, &PathEdge{From: buildUpStreamID(up.ID), To: buildMidStreamID(mid.ID), Val: mid.OriCap, Dis: disMul})
+			path = append(path, &PathEdge{
+				From: buildUpStreamID(up.ID),
+				To:   buildMidStreamID(mid.ID),
+				Val:  mid.OriCap.Sub(mid.Cap),
+				Dis:  disMul})
 		}
 
 		sort.Slice(path, func(i, j int) bool {
