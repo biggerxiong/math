@@ -19,7 +19,8 @@ func ReadMidStreams(path string) ([]*model.MidStream, error) {
 				X: util.StringMustToFloat(values[1]),
 				Y: util.StringMustToFloat(values[2]),
 			},
-			Cap: util.StringMustToDecimal(values[3]),
+			Cap:    util.StringMustToDecimal(values[3]),
+			OriCap: util.StringMustToDecimal(values[3]),
 		}
 		ret = append(ret, &row)
 	})

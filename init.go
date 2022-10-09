@@ -14,15 +14,33 @@ import (
 )
 
 func init() {
-	SetUpLog()
 	InitConfig()
+	SetUpLog()
 	InitModels()
 }
 
+var strToLogLevel = map[string]logrus.Level{
+	"debug": logrus.DebugLevel,
+	"info":  logrus.InfoLevel,
+	"warn":  logrus.WarnLevel,
+	"error": logrus.ErrorLevel,
+	"fatal": logrus.FatalLevel,
+	"panic": logrus.PanicLevel,
+	"trace": logrus.TraceLevel,
+	"":      logrus.InfoLevel,
+}
+
 func SetUpLog() {
-	// logrus.SetFormatter(&logrus.JSONFormatter{})
-	logrus.SetLevel(logrus.DebugLevel)
-	logrus.SetOutput(os.Stdout)
+	logrus.SetLevel(strToLogLevel[config.GetConfig().LogLevel])
+	if config.GetConfig().LogPath != "" {
+		f, err := os.OpenFile(config.GetConfig().LogPath, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+		if err != nil {
+			panic(err)
+		}
+		logrus.SetOutput(f)
+	} else {
+		logrus.SetOutput(os.Stdout)
+	}
 	logrus.SetReportCaller(false)
 	logrus.SetFormatter(&nested.Formatter{
 		HideKeys:    true,
@@ -35,7 +53,7 @@ func InitConfig() {
 	if err != nil {
 		panic(fmt.Sprintf("decode config file err:%v", err.Error()))
 	}
-	logrus.Infof("config: %v", config.GetConfig())
+	fmt.Printf("config: %v", config.GetConfig())
 }
 
 func InitModels() {
@@ -45,29 +63,29 @@ func InitModels() {
 	if err != nil {
 		panic(errors.Wrap(err, "read Edges failed"))
 	}
-	logrus.Debugf("Edges: %v", Edges)
+	logrus.Tracef("Edges: %v", Edges)
 
 	Nodes, err = reader.ReadNodes(config.GetConfig().NodePath)
 	if err != nil {
 		panic(errors.Wrap(err, "read Nodes failed"))
 	}
-	logrus.Debugf("Nodes: %v", Nodes)
+	logrus.Tracef("Nodes: %v", Nodes)
 
 	Streets, err = reader.ReadStreets(config.GetConfig().StreetPath)
 	if err != nil {
 		panic(errors.Wrap(err, "read Streets failed"))
 	}
-	logrus.Debugf("Streets: %v", Streets)
+	logrus.Tracef("Streets: %v", Streets)
 
 	MidStreams, err = reader.ReadMidStreams(config.GetConfig().MidStreamPath)
 	if err != nil {
 		panic(errors.Wrap(err, "read MidStreams failed"))
 	}
-	logrus.Debugf("MidStreams: %v", MidStreams)
+	logrus.Tracef("MidStreams: %v", MidStreams)
 
 	UpStreams, err = reader.ReadUpStreams(config.GetConfig().UpStreamPath)
 	if err != nil {
 		panic(errors.Wrap(err, "read UpStreams failed"))
 	}
-	logrus.Debugf("UpStreams: %v", UpStreams)
+	logrus.Tracef("UpStreams: %v", UpStreams)
 }

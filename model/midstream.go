@@ -10,7 +10,8 @@ type MidStream struct {
 	ID int
 	Point
 
-	Cap decimal.Decimal
+	Cap    decimal.Decimal
+	OriCap decimal.Decimal
 }
 
 func (s MidStream) String() string {

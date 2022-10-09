@@ -6,6 +6,13 @@ street_path = "./data/streets.xlsx"
 mid_stream_path = "./data/midstream.xlsx"
 up_stream_path = "./data/upstream.xlsx"
 
-min_dis = 1  # 笛卡尔积距离小于这个值将被视为同一个点
+mid_to_street_path = "/Users/xiongxuan/go/math/data/mid_to_street.xlsx"
+up_to_mid_path = "/Users/xiongxuan/go/math/data/up_to_mid.xlsx"
 
-foods_per_person = "5"  # 每个人需要多少单位的物资
+min_dis = 20  # 笛卡尔积距离小于这个值将被视为同一个点
+near_count = 1  # 附近点的个数
+foods_per_person = "0.001"  # 每个人需要多少单位的物资
+max_dis_mul = 2.0  # 最大距离倍数
+
+log_level = "debug"  # 日志级别
+log_path = "/Users/xiongxuan/go/math/street.log"  # 日志路径
