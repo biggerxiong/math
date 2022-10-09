@@ -1,9 +1,8 @@
 package main
 
 import (
-	"fmt"
-	"main/config"
 	"main/model"
+	v1 "main/v1"
 )
 
 var configPath = "config/config.toml"
@@ -18,6 +17,12 @@ var (
 )
 
 func main() {
-	fmt.Println(config.GetConfig())
-	fmt.Println(UpStreams)
+	algo := v1.NewAlgo(&v1.Models{
+		Edges:      Edges,
+		Nodes:      Nodes,
+		Streets:    Streets,
+		UpStreams:  UpStreams,
+		MidStreams: MidStreams})
+
+	algo.Run()
 }

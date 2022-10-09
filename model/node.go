@@ -8,7 +8,7 @@ type Node struct {
 }
 
 func (p Node) String() string {
-	return fmt.Sprintf("Node{X: %s, Y:%s}", p.X, p.Y)
+	return fmt.Sprintf("Node{X: %.13f, Y:%.13f}", p.X, p.Y)
 }
 
 func (p Node) Key() string {

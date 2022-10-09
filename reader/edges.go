@@ -17,7 +17,7 @@ func ReadEdges(path string) ([]*model.Edge, error) {
 			ID:   util.StringMustToInt(values[0]),
 			From: util.StringMustToInt(values[1]),
 			To:   util.StringMustToInt(values[2]),
-			Dis:  values[3],
+			Dis:  util.StringMustToFloat(values[3]),
 		}
 		ret = append(ret, &row)
 	})

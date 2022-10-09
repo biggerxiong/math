@@ -1,6 +1,10 @@
 package model
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/shopspring/decimal"
+)
 
 // Street 小区
 type Street struct {
@@ -13,11 +17,11 @@ type Street struct {
 	StreetIndex   string
 	BelongTo      string
 
-	Cap string
+	Cap decimal.Decimal
 }
 
 func (s Street) String() string {
-	return fmt.Sprintf("Streets{ID:%d, X:%s, Y:%s}", s.ID, s.X, s.Y)
+	return fmt.Sprintf("Streets{ID:%d, X:%.13f, Y:%.13f}", s.ID, s.X, s.Y)
 }
 
 func (s Street) Key() string {
@@ -32,10 +36,10 @@ func (s Street) GetID() int {
 	return s.ID
 }
 
-func (s Street) GetX() string {
+func (s Street) GetX() float64 {
 	return s.X
 }
 
-func (s Street) GetY() string {
+func (s Street) GetY() float64 {
 	return s.Y
 }

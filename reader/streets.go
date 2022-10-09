@@ -20,16 +20,15 @@ func ReadStreets(path string) ([]*model.Street, error) {
 			FamilyCount:   util.StringMustToInt(values[2]),
 			PeopleCount:   util.StringMustToInt(values[3]),
 			Point: model.Point{
-				X: values[4],
-				Y: values[5],
+				X: util.StringMustToFloat(values[4]),
+				Y: util.StringMustToFloat(values[5]),
 			},
 			StreetIndex: values[6],
 			BelongTo:    values[7],
 		}
 
 		row.Cap = util.IntMustToDecimal(row.PeopleCount).
-			Mul(util.StringMustToDecimal(config.GetConfig().FoodsPerPerson)).
-			String()
+			Mul(util.StringMustToDecimal(config.GetConfig().FoodsPerPerson))
 		ret = append(ret, &row)
 	})
 

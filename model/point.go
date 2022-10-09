@@ -1,13 +1,12 @@
 package model
 
 import (
-	"main/util"
 	"math"
 )
 
 type Point struct {
-	X string
-	Y string
+	X float64
+	Y float64
 }
 
 // 地球的平均半径以千米为单位
@@ -20,10 +19,10 @@ func degrees2radians(degrees float64) float64 {
 
 // Distance Haversine公式(半正矢公式):计算两点之间的直线距离
 func (origin *Point) Distance(destination *Point) float64 {
-	fOriginX := util.StringMustToFloat(origin.X)
-	fOriginY := util.StringMustToFloat(origin.Y)
-	fDestX := util.StringMustToFloat(destination.X)
-	fDestY := util.StringMustToFloat(destination.Y)
+	fOriginX := origin.X
+	fOriginY := origin.Y
+	fDestX := destination.X
+	fDestY := destination.Y
 
 	degreesLat := degrees2radians(fDestX - fOriginX)
 	degreesLong := degrees2radians(fDestY - fOriginY)

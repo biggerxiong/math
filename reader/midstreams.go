@@ -16,10 +16,10 @@ func ReadMidStreams(path string) ([]*model.MidStream, error) {
 		row := model.MidStream{
 			ID: util.StringMustToInt(values[0]),
 			Point: model.Point{
-				X: values[1],
-				Y: values[2],
+				X: util.StringMustToFloat(values[1]),
+				Y: util.StringMustToFloat(values[2]),
 			},
-			Cap: util.StringMustToInt(values[3]),
+			Cap: util.StringMustToDecimal(values[3]),
 		}
 		ret = append(ret, &row)
 	})

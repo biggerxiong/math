@@ -16,8 +16,8 @@ func ReadNodes(path string) ([]*model.Node, error) {
 		row := model.Node{
 			ID: util.StringMustToInt(values[0]),
 			Point: model.Point{
-				X: values[1],
-				Y: values[2],
+				X: util.StringMustToFloat(values[1]),
+				Y: util.StringMustToFloat(values[2]),
 			},
 		}
 		ret = append(ret, &row)

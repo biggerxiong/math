@@ -1,8 +1,9 @@
 package util
 
 import (
-	"github.com/shopspring/decimal"
 	"strconv"
+
+	"github.com/shopspring/decimal"
 )
 
 func StringMustToInt(s string) int {
@@ -33,4 +34,8 @@ func StringMustToDecimal(s string) decimal.Decimal {
 
 func IntMustToDecimal(i int) decimal.Decimal {
 	return decimal.NewFromInt32(int32(i))
+}
+
+func FloatMustToDecimal(f float64) decimal.Decimal {
+	return decimal.NewFromFloat(f)
 }
