@@ -359,7 +359,7 @@ func (a *Algo) RunUpToMid() *Ans {
 	return ans
 }
 
-func (a *Algo) Run() *Ans {
+func (a *Algo) RunMidToStreet() *Ans {
 	ans := &Ans{Path: make([]*PathEdge, 0, 1)}
 	queue := pq.NewPriorityQueue()
 
@@ -406,4 +406,115 @@ func (a *Algo) Run() *Ans {
 	}
 
 	return ans
+}
+
+// RunMidToStreetCars 类 dijkstra 算法求最小生成树的变种
+func (a *Algo) RunMidToStreetCars() *Ans {
+	dis := make(map[int]float64, len(a.Streets))
+	pre := make(map[int]int, len(a.Streets))
+	next := make(map[int]int, len(a.Streets))
+	count := make(map[int]int, len(a.Streets)) // street count
+	sum := make(map[int]decimal.Decimal, len(a.Streets))
+	visited := make(map[int]bool, len(a.Streets))
+	start := make(map[int]int, len(a.Streets))
+
+	// init
+	for _, street := range a.Streets {
+		pre[street.ID] = -1
+		next[street.ID] = street.ID
+		count[street.ID] = 1
+		sum[street.ID] = street.OriCap
+		dis[street.ID] = MaxDis
+
+		for _, mid := range a.MidStreams {
+			if _, ok := a.GMidToStreet[mid.ID][street.ID]; ok {
+				if dis[street.ID] > a.GMidToStreet[mid.ID][street.ID] {
+					dis[street.ID] = a.GMidToStreet[mid.ID][street.ID]
+					start[street.ID] = mid.ID
+				}
+			}
+		}
+	}
+
+	logrus.Tracef("ori dis: %v", dis)
+	logrus.Tracef("ori sum: %v", sum)
+
+	for i := 0; i < len(a.Streets); i++ {
+		minDis := math.MaxFloat64
+		minID := -1
+		for _, street := range a.Streets {
+			if visited[street.ID] {
+				continue
+			}
+
+			if dis[street.ID] < minDis {
+				minDis = dis[street.ID]
+				minID = street.ID
+			}
+		}
+
+		if minID == -1 {
+			break
+		}
+
+		logrus.Tracef("minID: %v", minID)
+
+		visited[minID] = true
+		for _, street := range a.Streets {
+			if visited[street.ID] {
+				continue
+			}
+
+			if dis[street.ID] > dis[minID]+a.IndexToStreet[minID].Point.Distance(&street.Point) &&
+				sum[street.ID].Add(sum[minID]).LessThanOrEqual(config.GetConfig().MaxCarCapDecimal) {
+
+				dis[street.ID] = dis[minID] + a.IndexToStreet[minID].Point.Distance(&street.Point)
+				pre[street.ID] = minID
+				next[minID] = street.ID
+				count[street.ID] = count[minID] + 1
+				sum[street.ID] = sum[minID].Add(sum[street.ID])
+
+				if count[street.ID] >= config.GetConfig().MaxStreetPerCar {
+					visited[street.ID] = true
+				}
+				if sum[street.ID].GreaterThanOrEqual(config.GetConfig().MaxCarCapDecimal) {
+					visited[street.ID] = true
+				}
+				break
+			}
+		}
+	}
+
+	logrus.Debugf("dis: %+v", dis)
+	logrus.Debugf("pre: %+v", pre)
+	logrus.Debugf("next: %+v", next)
+	logrus.Debugf("count: %+v", count)
+	logrus.Debugf("sum: %+v", sum)
+	logrus.Debugf("start: %+v", start)
+
+	ans := &Ans{Cars: make(Cars, 0, 1)}
+	for _, street := range a.Streets {
+		// count 为 1 的是起始点
+		if count[street.ID] != 1 {
+			continue
+		}
+
+		crossStreets := a.GetCarPath(street.ID, next)
+		end := crossStreets[len(crossStreets)-1]
+		ans.AddCarInfo(start[street.ID], crossStreets, sum[end], dis[end])
+	}
+
+	return ans
+}
+
+func (a *Algo) GetCarPath(start int, next map[int]int) []int {
+	path := make([]int, 0, 1)
+	path = append(path, start)
+
+	for next[start] != start {
+		start = next[start]
+		path = append(path, start)
+	}
+
+	return path
 }

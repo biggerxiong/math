@@ -17,7 +17,8 @@ type Street struct {
 	StreetIndex   string
 	BelongTo      string
 
-	Cap decimal.Decimal
+	Cap    decimal.Decimal
+	OriCap decimal.Decimal
 }
 
 func (s Street) String() string {

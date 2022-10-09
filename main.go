@@ -30,16 +30,25 @@ func main() {
 		UpStreams:  UpStreams,
 		MidStreams: MidStreams})
 
-	ans := algo.Run()
+	ans := algo.RunMidToStreet()
 
 	logrus.Infof("write to file, path: %s", config.GetConfig().Path.MidToStreetPath)
-	err := writer.WriteAnswer(config.GetConfig().MidToStreetPath, ans)
+	err := writer.WriteAnswerPath(config.GetConfig().MidToStreetPath, ans)
 	if err != nil {
 		logrus.Fatal(err)
 	}
 
 	ans2 := algo.RunUpToMid()
 	logrus.Infof("write to file, path: %s", config.GetConfig().Path.UpToMidPath)
-	err = writer.WriteAnswer(config.GetConfig().UpToMidPath, ans2)
+	err = writer.WriteAnswerPath(config.GetConfig().UpToMidPath, ans2)
+	if err != nil {
+		logrus.Fatal(err)
+	}
 
+	ans3 := algo.RunMidToStreetCars()
+	logrus.Infof("write to file, path: %s", config.GetConfig().Path.MidToStreetCarPath)
+	err = writer.WriteAnswerCar(config.GetConfig().MidToStreetCarPath, ans3)
+	if err != nil {
+		logrus.Fatal(err)
+	}
 }

@@ -29,6 +29,7 @@ func ReadStreets(path string) ([]*model.Street, error) {
 
 		row.Cap = util.IntMustToDecimal(row.PeopleCount).
 			Mul(util.StringMustToDecimal(config.GetConfig().FoodsPerPerson))
+		row.OriCap = row.Cap.Copy()
 		ret = append(ret, &row)
 	})
 

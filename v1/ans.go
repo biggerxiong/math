@@ -30,8 +30,45 @@ func (p Path) AddEdge(from, to string, val decimal.Decimal, dis float64) Path {
 	return append(p, &PathEdge{From: from, To: to, Val: val, Dis: dis})
 }
 
+type CarInfo struct {
+	ID int
+
+	StartMidID   int
+	CrossStreets []int
+
+	CapSum decimal.Decimal
+	Mile   float64
+}
+
+func (c *CarInfo) String() string {
+	return fmt.Sprintf("CarInfo{ID:%d, StartMidID:%d, CrossStreets:%v, CapSum:%s, Mile:%f}",
+		c.ID, c.StartMidID, c.CrossStreets, c.CapSum.String(), c.Mile)
+}
+
+func (c *CarInfo) ToStrArr() []string {
+	return []string{
+		strconv.Itoa(c.ID),
+		buildMidStreamID(c.StartMidID),
+		strings.Join(c.ToPathStrings(), ","),
+		c.CapSum.String(),
+		strconv.FormatFloat(c.Mile, 'f', 4, 64),
+	}
+}
+
+func (c *CarInfo) ToPathStrings() []string {
+	ss := make([]string, 0, len(c.CrossStreets)+1)
+
+	for _, streetID := range c.CrossStreets {
+		ss = append(ss, buildStreetID(streetID))
+	}
+	return ss
+}
+
+type Cars []*CarInfo
+
 type Ans struct {
 	Path Path
+	Cars Cars
 }
 
 func (a *Ans) String() string {
@@ -57,4 +94,15 @@ func buildUpStreamID(id int) string {
 func (a *Ans) AddEdge(from, to int, val decimal.Decimal, dis float64) {
 	a.Path = a.Path.AddEdge(buildMidStreamID(from), buildStreetID(to), val, dis)
 	logrus.Debugf("ans: add edge: %v", a.Path[len(a.Path)-1])
+}
+
+func (a *Ans) AddCarInfo(start int, crossStreets []int, capSum decimal.Decimal, mile float64) {
+	a.Cars = append(a.Cars, &CarInfo{
+		ID:           len(a.Cars) + 1,
+		StartMidID:   start,
+		CrossStreets: crossStreets,
+		CapSum:       capSum,
+		Mile:         mile,
+	})
+	logrus.Debugf("ans: add car: %v", a.Cars[len(a.Cars)-1])
 }
